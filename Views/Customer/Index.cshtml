@@ -1,0 +1,69 @@
+﻿@model CustomerManagerWeb.Models.MessageResponse<List<Customer>>;
+
+@{
+    ViewData["Title"] = "Página Inicial";
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@if (!string.IsNullOrEmpty(successMessage))
+{
+    <script>
+        window.onload = function () {
+            alert(decodeURIComponent('@Uri.EscapeDataString(successMessage)'));
+        };
+    </script>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">
+        @TempData["ErrorMessage"]
+    </div>
+
+    <div class="form-group">
+        <a href="@Url.Action("Index", "Customer")" class="btn btn-info">Voltar para a Lista</a>
+    </div>
+}
+else
+{
+    <div class="col-md-2" style="margin-bottom:30px">
+        <a href="@Url.Action("Create", "Customer")" class="btn btn-success mb-2" style="text-align:right">Novo</a>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <form class="d-flex">
+                <div class="form-group mb-2">
+                    <input type="text" class="form-control custom-width-filter" id="filterInput" placeholder="Faça sua busca aqui.">
+                    <button type="button" class="btn btn-primary ml-2" style="margin-top:5px;" onclick="RenderWithFilter()">Filtrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div id="list">
+        @Html.Partial("List", Model.Data)
+    </div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnFilter").click(function () {
+            RenderWithFilter();
+        });
+    });
+
+    function RenderWithFilter(Filter) {
+        var _pFilter = $("#filterInput").val();
+        $.ajax({
+            url: "/Customer/Index",
+            type: "GET",
+            data: { pFilter: _pFilter, btnFilterClick : true},
+            success: function (result) {
+                    $("#list").html(result);
+            },
+            error: function (error) {
+                alert.error("Ocorreu um erro.", error);
+                console.error("Erro ao chamar o método Index: ", error);
+            }
+        });
+    }
+</script>

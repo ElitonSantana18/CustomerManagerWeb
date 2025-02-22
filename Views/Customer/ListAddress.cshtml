@@ -1,0 +1,48 @@
+﻿@model List<CustomerManagerWeb.Models.Address>;
+@{
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning" role="alert" style="text-align:center; margin:10px">
+        Nenhum endereço encontrado!
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <h2>Endereços</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Logradouro</th>
+                    <th width="50px"></th>
+                    <th width ="50px"></th>
+                    <th width="50px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var address in Model)
+                {
+                    <tr>
+                        <td>@address.Id</td>
+                        <td>@address.Name</td>
+                        <td>
+                            <a href="@Url.Action("DetailsAddress", "Customer", new { Id = address.Id, CustomerId = address.CustomerId })" class="btn btn-info">Detalhes</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("EditAddress", "Customer", new { Id = address.Id, CustomerId = address.CustomerId })" class="btn btn-warning">Editar</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("DeleteAddress", "Customer", new { Id = address.Id, CustomerId = address.CustomerId })" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+<div class="clearfix">

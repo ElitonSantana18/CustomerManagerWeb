@@ -1,0 +1,38 @@
+﻿@using CustomerManagerWeb.Models.Helpers
+@model CustomerManagerWeb.Models.Address;
+@{
+    ViewBag.Title = "Cadastrar Endereço";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="form-group">
+    <div class="form-group">
+        <a href="@Url.Action("Details", "Customer", new { id = Model.CustomerId })" class="btn btn-info">Voltar para a lista</a>
+    </div>
+</div>
+
+<div style="padding:20px">
+    <h2>Cadastrar endereço</h2>
+
+    @using (Html.BeginForm("CreateAddress", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.CustomerId)
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Logradouro (Rua, Avenida e etc...):")
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+        
+        <div class="form-group" style="margin-top:10px">
+            <input type="submit" value="Cadastrar" class="btn btn-primary" id="btnCreateAddress" />
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+        });
+    </script>
+}

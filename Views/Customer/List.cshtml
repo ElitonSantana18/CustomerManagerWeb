@@ -1,0 +1,48 @@
+﻿@using CustomerManagerWeb.Models.Helpers;
+@model List<CustomerManagerWeb.Models.Customer>;
+@{
+}
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-warning" role="alert" style="text-align:center; margin:10px">
+        Nenhum cliente encontrado!
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <h2>Lista de Clientes</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Email</th>
+                    <th width="50px"></th>
+                    <th width ="50px"></th>
+                    <th width="50px"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var customer in Model)
+                {
+                    <tr>
+                        <td>@customer.Id</td>
+                        <td>@customer.Name</td>
+                        <td>@customer.Email</td>
+                        <td>
+                            <a href="@Url.Action("Details", "Customer", new { id = customer.Id })" class="btn btn-info">Detalhes</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Edit", "Customer", new { id = customer.Id })" class="btn btn-warning">Editar</a>
+                        </td>
+                        <td>
+                            <a href="@Url.Action("Delete", "Customer", new { id = customer.Id })" class="btn btn-danger" onclick="return confirm('Tem certeza que deseja excluir?')">Excluir</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,33 @@
+﻿@model CustomerManagerWeb.Models.MessageResponse<List<CustomerVM>>;
+@{
+    ViewData["Title"] = "Página Inicial";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="text-center">
+    <h1 style="color:white">Gestor de Clientes</h1>
+    <h7 style="color:white">TOP 3 Clientes</h7>
+</div>
+@if (Model == null || !Model.Success)
+{
+    <div class="alert alert-warning" role="alert" style="text-align:center; margin:10px 30%;">
+        Nenhum cliente encontrado!
+    </div>
+}
+else
+{
+    <div class="container mt-5">
+        <div class="row">
+            @foreach (var customer in Model.Data)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <img src="@customer.CompanyLogo" class="card-img-top" alt="Cliente">
+                        <div class="card-body">
+                            <h5 class="card-title">@customer.Name</h5>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

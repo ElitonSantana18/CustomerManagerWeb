@@ -1,0 +1,68 @@
+﻿@using CustomerManagerWeb.Models.Helpers
+@model CustomerManagerWeb.Models.Customer;
+@{
+    ViewBag.Title = "Alteração do Veículo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Edit", "Customer", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.Id);
+
+    <div style="padding:20px">
+        <h2>Alteração do Cliente</h2>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, "Nome:")
+            @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, "Email:")
+            @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
+        </div>
+        <br />
+        <div class="form-group">
+            <img id="imageDisplay" src="data:image/png;base64,@Model.CompanyLogo" class="img-thumbnail" style="max-width: 200px; max-height: 200px;" />
+            <!-- Campo oculto para armazenar o valor de ImageURL -->
+            <input asp-for="CompanyLogo" type="hidden" />
+
+            <input asp-for="ImageFile" type="file" class="form-control" onchange="showImage(this)" />
+            <span asp-validation-for="ImageFile" class="text-danger"></span>
+        </div>
+
+        <!-- Campos ocultos para os endereços -->
+        @for (int i = 0; i < Model.Addresses.Count; i++)
+        {
+            @Html.HiddenFor(model => model.Addresses[i].Id)
+            @Html.HiddenFor(model => model.Addresses[i].CustomerId)
+            @Html.HiddenFor(model => model.Addresses[i].Name)
+        }
+
+
+        <div class="form-group" style="margin-top: 10px">
+            <button type="submit" class="btn btn-primary">Salvar Alterações</button>
+            <a href="@Url.Action("Index", "Customer")" class="btn btn-info">Voltar para a Lista</a>
+        </div>
+    </div>
+}
+
+<script type="text/javascript">
+    function showImage(input) {
+        var imageDisplay = document.getElementById('imageDisplay');
+
+        if (input.files && input.files[0]) {
+            var leitor = new FileReader();
+
+            leitor.onload = function (e) {
+                imageDisplay.src = e.target.result;
+            }
+
+            leitor.readAsDataURL(input.files[0]);
+
+        }
+    }
+</script>
